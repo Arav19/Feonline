@@ -1,130 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat's Dark Web</title>
-
-    <style>
-        body {
-
-
-
-            background-color: black;
-
-               color: green;
-
-
-
-                       font-family: monospace;
-                          text-align: center;
-
-            margin: 0;
-
-            padding: 0;
-        }
-
-        .banner {
-            background-color: limegreen;
-           color: black;
- padding: 20px 0;
-     margin-bottom: 20px;
-
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-        }
-
-        .banner h1 {
-            margin: 0;
-            font-size: 2em;
-        }
-
-        p {
-            font-size: 1.2em;
-        }
-
-                            .ascii-cat {
-                             margin: 20px 0;
-                             color: lime;
-                               }
-
-        button {
-            margin: 10px 0;
-           padding: 10px 20px;
-
-            background-color: green;
- color: black;
-
-      border: none;
-            font-size: 1em;
-        cursor: pointer;
-        }
-
-        button:hover {
-            background-color: lime;
-        }
-
-
-        /*          I used the #secret to act as a call for the number ID for secret... I made scret in html and javascript and to call it here i need to use the #*/
-
-
-        #secret { 
-            margin-top: 20px;
-        }
-
-        #secret img {
-            max-width: 90%;
-            height: auto;
-                margin-top: 20px;
-                 border: 5px solid lime;
-                animation: pulse 1s infinite;
-        }
-
-       
-        
-    </style>
-
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gyro Sphere Viewer</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: black; }
+    canvas { display: block; }
+  </style>
 </head>
-
-
-
 <body>
-    
-        <div class="banner">
-        <h1>🐾 FE-ONLINE 🐾</h1>
-    </div>
-    
-    <p>THE FELINE ONLINE</p>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/DeviceOrientationControls.js"></script>
+  <script>
+    let scene, camera, renderer, controls;
 
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.z = 0.01; // almost center of the sphere
 
-    <div class="ascii-cat">
-        <pre>
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
+    // Create sphere geometry (inside view)
+    const geometry = new THREE.SphereGeometry(10, 32, 32);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x00ffff,
+      wireframe: true,
+      side: THREE.BackSide
+    });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
 
-   /\_/\  
-  ( o.o ) 
- > ^ <
+    // Gyroscope controls
+    controls = new THREE.DeviceOrientationControls(camera);
 
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
 
-        </pre>
-    </div>
+    animate();
 
-                <button onclick="revealTrap()">FIND CATNIP DEALERS NEAR ME</button>
-             <button onclick="revealTrap()">END ALL HUMANS</button>
-            <button onclick="revealTrap()">HOW TO DISTROY RUG</button>
-
-    <div id="secret">Click a button to uncover the secrets...</div>
-
-    <script>
-        function revealTrap() {
-            const secretDiv = document.getElementById('secret');
-
-            secretDiv.innerHTML = '<img src="police.gif" alt="Police Trap!" style="width: 100%; max-height: 90vh;">';
-
-/* basically how this works is i have the buttons and if any button is presed it triggers the function revealTrap which is basically a hidden Div that unhides */
-
-
-        }
-    </script>
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
 </body>
 </html>
